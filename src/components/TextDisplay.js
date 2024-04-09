@@ -1,45 +1,41 @@
 import React, { useState } from "react";
-import { Input, Button, Row, Col, Card, Typography } from "antd";
+import { Input, Button, Row, Col, Card } from "antd";
 import axios from "axios";
 
 const { TextArea } = Input;
 
-const URLComponent = () => {
-  const [url, setURL] = useState("");
+const TextDisplay = () => {
+  const [inputText, setInputText] = useState("");
   const [summary, setSummary] = useState("");
 
-  const handleURLChange = (event) => {
-    setURL(event.target.value);
+  const handleTextChange = (text) => {
+    setInputText(text);
   };
 
   const API_KEY = process.env.REACT_APP_TEXT_LAMBDA;
 
   const handleSummarize = async () => {
     try {
-      const requestBody = {
-        method: "url",
-        content: url,
-      };
-      const response = await axios.post(
-        `${API_KEY}/website-summary`,
-        requestBody
-      );
+      const response = await axios.post(`${API_KEY}/text-summary`, {
+        method: "content",
+        content: inputText,
+      });
 
       setSummary(response.data.summary);
     } catch (error) {
-      console.error("Error fetching URL:", error);
-      setSummary("Error fetching URL. Please check the URL and try again.");
+      console.error("Error:", error);
     }
   };
 
   return (
     <Row justify="center" align="middle" style={{ marginTop: "20px" }}>
       <Col span={12}>
-        <Card title="Website Summarizer" style={{ width: "100%" }}>
-          <Input
-            placeholder="Paste URL here..."
-            value={url}
-            onChange={handleURLChange}
+        <Card title="Text Summarizer" style={{ width: "100%" }}>
+          <TextArea
+            rows={4}
+            placeholder="Enter your text here..."
+            value={inputText}
+            onChange={(e) => handleTextChange(e.target.value)}
           />
           <Button
             type="primary"
@@ -61,4 +57,4 @@ const URLComponent = () => {
   );
 };
 
-export default URLComponent;
+export default TextDisplay;
