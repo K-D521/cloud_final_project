@@ -1,14 +1,8 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Paper,
-  Typography,
-  TextField,
-} from "@mui/material";
+import { Input, Button, Row, Col, Card, Typography } from "antd";
 import axios from "axios";
+
+const { TextArea } = Input;
 
 const TextComponent = () => {
   const [inputText, setInputText] = useState("");
@@ -17,7 +11,9 @@ const TextComponent = () => {
   const handleTextChange = (text) => {
     setInputText(text);
   };
+
   const API_KEY = process.env.REACT_APP_TEXT_LAMBDA;
+
   const handleSummarize = async () => {
     try {
       const response = await axios.post(`${API_KEY}/text-summary`, {
@@ -31,68 +27,33 @@ const TextComponent = () => {
     }
   };
 
-  const textFieldStyle = {
-    border: "none",
-    resize: "none",
-    outline: "none",
-    boxShadow: "none",
-  };
-
   return (
-    <Container maxWidth="lg">
-      <Box mt={3} textAlign="center">
-        <Typography variant="h4">Text Summarizer</Typography>
-      </Box>
-      <Grid container spacing={2} mt={3}>
-        <Grid item xs={12} md={6}>
-          <Paper
-            elevation={3}
-            sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+    <Row justify="center" align="middle" style={{ marginTop: "20px" }}>
+      <Col span={12}>
+        <Card title="Text Summarizer" style={{ width: "100%" }}>
+          <TextArea
+            rows={4}
+            placeholder="Enter your text here..."
+            value={inputText}
+            onChange={(e) => handleTextChange(e.target.value)}
+          />
+          <Button
+            type="primary"
+            onClick={handleSummarize}
+            style={{ marginTop: "10px" }}
           >
-            <TextField
-              label="Enter your text here..."
-              multiline
-              rows={20}
-              fullWidth
-              variant="outlined"
-              value={inputText}
-              onChange={(e) => handleTextChange(e.target.value)}
-              inputProps={{ style: textFieldStyle }}
-              sx={{ flex: 1 }}
-            />
-            <Box mt={2} textAlign="center" mb={2}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSummarize}
-              >
-                Summarize
-              </Button>
-            </Box>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper
-            elevation={3}
-            sx={{ height: "100%", display: "flex", flexDirection: "column" }}
-          >
-            <TextField
-              label="Summary"
-              multiline
-              rows={20}
-              fullWidth
-              variant="outlined"
-              value={summary}
-              disabled
-              inputProps={{ style: textFieldStyle }} // Apply the custom style to the input
-              sx={{
-                flex: 1,
-              }}
-            />
-          </Paper>
-        </Grid>
-      </Grid>
-    </Container>
+            Summarize
+          </Button>
+          <TextArea
+            rows={4}
+            placeholder="Summary"
+            value={summary}
+            disabled
+            style={{ marginTop: "10px" }}
+          />
+        </Card>
+      </Col>
+    </Row>
   );
 };
 

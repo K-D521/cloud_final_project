@@ -1,45 +1,31 @@
 import React, { useState } from "react";
-import Button from "@mui/material/Button";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import Box from "@mui/material/Box";
+import { Button, Radio, Row, Col } from "antd";
 import TextComponent from "../components/TextComponent";
 import UrlComponent from "../components/URLComponent";
 
 const HomePage = () => {
   const [selectedOption, setSelectedOption] = useState("Text");
 
-  const handleOptionChange = (option) => {
-    setSelectedOption(option);
+  const handleOptionChange = (e) => {
+    setSelectedOption(e.target.value);
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        "& > *": {
-          m: 1,
-        },
-      }}
-    >
-      <ButtonGroup variant="outlined" aria-label="outlined button group">
-        <Button
-          onClick={() => handleOptionChange("Text")}
-          variant={selectedOption === "Text" ? "contained" : "outlined"}
+    <Row justify="center" align="middle" style={{ marginTop: "20px" }}>
+      <Col span={12}>
+        <Radio.Group
+          onChange={handleOptionChange}
+          value={selectedOption}
+          optionType="button"
+          buttonStyle="solid"
         >
-          Text
-        </Button>
-        <Button
-          onClick={() => handleOptionChange("URL")}
-          variant={selectedOption === "URL" ? "contained" : "outlined"}
-        >
-          URL
-        </Button>
-      </ButtonGroup>
-      {selectedOption === "Text" ? <TextComponent /> : null}
-      {selectedOption === "URL" ? <UrlComponent /> : null}
-    </Box>
+          <Radio.Button value="Text">Text</Radio.Button>
+          <Radio.Button value="URL">URL</Radio.Button>
+        </Radio.Group>
+        {selectedOption === "Text" ? <TextComponent /> : null}
+        {selectedOption === "URL" ? <UrlComponent /> : null}
+      </Col>
+    </Row>
   );
 };
 

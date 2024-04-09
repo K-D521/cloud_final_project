@@ -1,13 +1,8 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Container,
-  Paper,
-  Typography,
-  TextField,
-} from "@mui/material";
+import { Input, Button, Row, Col, Card, Typography } from "antd";
 import axios from "axios";
+
+const { TextArea } = Input;
 
 const URLComponent = () => {
   const [url, setURL] = useState("");
@@ -30,68 +25,39 @@ const URLComponent = () => {
         requestBody
       );
 
-      console.log(response);
-
-      const data = response.data.summary;
-
-      console.log(data);
-      setSummary(data);
+      setSummary(response.data.summary);
     } catch (error) {
       console.error("Error fetching URL:", error);
       setSummary("Error fetching URL. Please check the URL and try again.");
     }
   };
 
-  const textFieldStyle = {
-    border: "none",
-    resize: "none", // Prevents resizing of the text area
-    outline: "none", // Removes focus outline when selected
-    boxShadow: "none", // Removes any box shadow
-  };
-
   return (
-    <Container maxWidth="sm">
-      {" "}
-      {/* Adjust the maxWidth as needed */}
-      <Box mt={3} textAlign="center">
-        <Typography variant="h4">Website Summarizer</Typography>
-      </Box>
-      <Paper
-        elevation={3}
-        sx={{
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          p: 2,
-          mt: 2,
-        }}
-      >
-        <TextField
-          label="Paste URL here..."
-          fullWidth
-          variant="outlined"
-          value={url}
-          onChange={handleURLChange}
-          inputProps={{ style: textFieldStyle }} // Apply the custom style to the input
-        />
-        <Box textAlign="center" mt={2}>
-          <Button variant="contained" color="primary" onClick={handleSummarize}>
+    <Row justify="center" align="middle" style={{ marginTop: "20px" }}>
+      <Col span={12}>
+        <Card title="Website Summarizer" style={{ width: "100%" }}>
+          <Input
+            placeholder="Paste URL here..."
+            value={url}
+            onChange={handleURLChange}
+          />
+          <Button
+            type="primary"
+            onClick={handleSummarize}
+            style={{ marginTop: "10px" }}
+          >
             Summarize
           </Button>
-        </Box>
-        <TextField
-          label="Summary"
-          multiline
-          rows={12}
-          fullWidth
-          variant="outlined"
-          value={summary}
-          disabled
-          inputProps={{ style: textFieldStyle }} // Apply the custom style to the input
-          sx={{ mt: 2 }} // Adjust the margin-top as needed
-        />
-      </Paper>
-    </Container>
+          <TextArea
+            rows={4}
+            placeholder="Summary"
+            value={summary}
+            disabled
+            style={{ marginTop: "10px" }}
+          />
+        </Card>
+      </Col>
+    </Row>
   );
 };
 
